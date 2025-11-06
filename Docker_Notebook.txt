@@ -1,0 +1,40 @@
+docker build -t pdw_py3.13.5 .
+docker build -t lcarlin/pdwh:1.0 .
+
+
+docker run -it --name Tst_PDW_DCKR -v "$(pwd)/shared_folder":/app/externos pdw_py3.13.5
+docker run -it --name Tst_PDW_DCKR -v "${HOME}/PDW_docker/shared_folder_win":/app/externos lcarlin/pdwh:1.0
+
+docker start -ai Tst_PDW_DCKR
+
+docker stop Tst_PDW_DCKR
+
+docker rm Tst_PDW_DC
+## listar as imagens
+docker images
+
+# apaga definitivo a imagem 
+docker rmi 32a3a898eb77
+
+rsync -av --progress --stats --human-readable pdw_py3.13.5.tar* lcarlin@192.168.2.101:~/.
+
+rsync -av --progress --stats --human-readable --partial /media/lcarlin/PS2_SMB/ /media/lcarlin/KODI/PS2_SMB/
+
+
+## liberar espaço do WSL 
+wsl --shutdown  
+Optimize-VHD -Path "C:\Users\luiz.carlin\AppData\Local\wsl\{54dd7d42-7868-4560-8e2e-47d6f9a85629}\ext4.vhdx" -Mode Full
+
+==================================================================================================================================
+Docker: how to solve the problem below docker: Error response from daemon: Conflict. The container name "/Tst_PDW_DCKR" is already in use by container "b5ca6bbffb3d1e5c9404a5dc47f599c2f18d67fb8e5914b3534c5733e80ff037". You have to remove (or rename) that container to be able to reuse that name.
+
+docker ps -a
+
+docker stop Tst_PDW_DCKR
+docker rm Tst_PDW_DCKR
+
+docker rm Tst_PDW_DCKR
+
+==================================================================================================================================
+cat PDW.SysMap.log | grep Linux| sort -n -t"|" -k 3 -r
+
